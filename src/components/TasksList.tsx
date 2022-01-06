@@ -49,7 +49,7 @@ export function TasksList({ tasks, toggleTaskDone, removeTask }: TasksListProps)
                         </View>
 
                         <Text
-                           style={styles.taskText}
+                           style={item.done ? styles.taskTextDone : styles.taskText}
                         >
                            {item.title}
                         </Text>

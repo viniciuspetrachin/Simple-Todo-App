@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ToastAndroid, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Header } from '../components/Header';
 import { Task, TasksList } from '../components/TasksList';
@@ -14,28 +14,19 @@ export function Home() {
          title: newTaskTitle,
          done: false
       }])
-      ToastAndroid.show(`Tarefa ${newTaskTitle} adicionada.`, ToastAndroid.SHORT)
    }
 
    function handleToggleTaskDone(id: number) {
       const doneTasks: Task[] = tasks.map(item => {
-         if (item.id === id) {
+         if (item.id === id)
             item.done = !item.done
-            ToastAndroid
-               .show(`Tarefa ${item.title} ${item.done ? 'concluida' : 'não concluida'}.`,
-                  ToastAndroid.SHORT)
-         }
          return item
       })
       setTasks(doneTasks)
    }
 
    function handleRemoveTask(id: number) {
-      setTasks(tasks.filter(item => {
-         if (item.id == id)
-            ToastAndroid.show(`Tarefa ${item.title} apagada`, ToastAndroid.SHORT)
-         return item.id !== id
-      }))
+      setTasks(tasks.filter(item => item.id !== id))
    }
 
    return (
