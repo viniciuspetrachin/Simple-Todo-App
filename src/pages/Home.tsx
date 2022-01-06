@@ -1,43 +1,61 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ToastAndroid, View } from 'react-native';
 
 import { Header } from '../components/Header';
 import { Task, TasksList } from '../components/TasksList';
 import { TodoInput } from '../components/TodoInput';
 
 export function Home() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+   const [tasks, setTasks] = useState<Task[]>([]);
 
-  function handleAddTask(newTaskTitle: string) {
-    //TODO - add new task
-  }
+   function handleAddTask(newTaskTitle: string) {
+      setTasks((tasks: Task[]) => [...tasks, {
+         id: new Date().getMilliseconds(),
+         title: newTaskTitle,
+         done: false
+      }])
+      ToastAndroid.show(`Tarefa ${newTaskTitle} adicionada.`, ToastAndroid.SHORT)
+   }
 
-  function handleToggleTaskDone(id: number) {
-    //TODO - toggle task done if exists
-  }
+   function handleToggleTaskDone(id: number) {
+      const doneTasks: Task[] = tasks.map(item => {
+         if (item.id === id) {
+            item.done = !item.done
+            ToastAndroid
+               .show(`Tarefa ${item.title} ${item.done ? 'concluida' : 'não concluida'}.`,
+                  ToastAndroid.SHORT)
+         }
+         return item
+      })
+      setTasks(doneTasks)
+   }
 
-  function handleRemoveTask(id: number) {
-    //TODO - remove task from state
-  }
+   function handleRemoveTask(id: number) {
+      setTasks(tasks.filter(item => {
+         if (item.id == id)
+            ToastAndroid.show(`Tarefa ${item.title} apagada`, ToastAndroid.SHORT)
+         return item.id !== id
+      }))
+   }
 
-  return (
-    <View style={styles.container}>
-      <Header tasksCounter={tasks.length} />
+   return (
+      <View style={styles.container}>
+         <Header tasksCounter={tasks.length} />
 
-      <TodoInput addTask={handleAddTask} />
+         <TodoInput addTask={handleAddTask} />
 
-      <TasksList 
-        tasks={tasks} 
-        toggleTaskDone={handleToggleTaskDone}
-        removeTask={handleRemoveTask} 
-      />
-    </View>
-  )
+         <TasksList
+            tasks={tasks}
+            toggleTaskDone={handleToggleTaskDone}
+            removeTask={handleRemoveTask}
+         />
+      </View>
+   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#EBEBEB'
-  }
+   container: {
+      flex: 1,
+      backgroundColor: '#EBEBEB'
+   }
 })
