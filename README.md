@@ -1,4 +1,4 @@
-# [Simple To.do App](https://www.figma.com/file/nCaMBNdQ4zURrmCMEkzFSB/Simple-Todo-App?node-id=10485%3A499)
+# [Simple To.do App](https://www.figma.com/file/UBKawgIJz8wKWKFCKLB3OE/To.do?node-id=10485%3A499)
 ![stacks](https://img.shields.io/badge/ReactJS-v17.0.1-green)
 ![stacks](https://img.shields.io/badge/React%20Native-0.64.2-green)
 ![stacks](https://img.shields.io/badge/Stack-Typescript-blue) 
@@ -12,7 +12,7 @@
 
 ## About the project <a id="en_us"></a>
 
-[To.do App](https://github.com/viniciuspetrachin/Simple-Todo-App) Simple application made in React Native using TypeScript. The idea was seen as a challenge for the Rocketseat Ignite course.
+[To.do App](https://www.figma.com/file/UBKawgIJz8wKWKFCKLB3OE/To.do?node-id=10485%3A499) Simple application made in React Native using TypeScript. The idea was seen as a challenge for the Rocketseat Ignite course.
 I will now implement integration with firebase for database storage, creation of an icon and launch in Play Store for educational purposes.
 
 ## Content
