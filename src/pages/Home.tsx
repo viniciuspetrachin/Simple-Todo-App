@@ -5,6 +5,11 @@ import { Header } from '../components/Header'
 import { Task, TasksList } from '../components/TasksList'
 import { TodoInput } from '../components/TodoInput'
 
+type EditTaskProps = {
+	taskId: number
+	taskNewTitle: string
+}
+
 export function Home() {
 	const [tasks, setTasks] = useState<Task[]>([])
 
@@ -55,6 +60,15 @@ export function Home() {
 				},
 			]
 		)
+	}
+
+	function handleEditTask({ taskId, taskNewTitle }: EditTaskProps) {
+		const newTasks = tasks.map((task) => ({ ...task }))
+		const taskToBeEdited = newTasks.find((task) => task.id === taskId)
+		if (taskToBeEdited) {
+			taskToBeEdited.title = taskNewTitle
+			setTasks(newTasks)
+		}
 	}
 
 	return (
