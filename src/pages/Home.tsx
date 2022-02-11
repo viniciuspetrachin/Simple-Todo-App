@@ -1,52 +1,65 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react'
+import { Alert, StyleSheet, View } from 'react-native'
 
-import { Header } from '../components/Header';
-import { Task, TasksList } from '../components/TasksList';
-import { TodoInput } from '../components/TodoInput';
+import { Header } from '../components/Header'
+import { Task, TasksList } from '../components/TasksList'
+import { TodoInput } from '../components/TodoInput'
 
 export function Home() {
-   const [tasks, setTasks] = useState<Task[]>([]);
+	const [tasks, setTasks] = useState<Task[]>([])
 
-   function handleAddTask(newTaskTitle: string) {
-      setTasks((tasks: Task[]) => [...tasks, {
-         id: new Date().getMilliseconds(),
-         title: newTaskTitle,
-         done: false
-      }])
-   }
+	function handleAddTask(newTaskTitle: string) {
+		const taskWithSameTitle = tasks.find(
+			(task) => task.title === newTaskTitle
+		)
 
-   function handleToggleTaskDone(id: number) {
-      const doneTasks: Task[] = tasks.map(item => {
-         if (item.id === id)
-            item.done = !item.done
-         return item
-      })
-      setTasks(doneTasks)
-   }
+		if (taskWithSameTitle) {
+			return Alert.alert(
+				'Tarefa já cadastrada',
+				'Você não pode cadastrar uma task com o mesmo nome'
+			)
+		}
 
-   function handleRemoveTask(id: number) {
-      setTasks(tasks.filter(item => item.id !== id))
-   }
+		setTasks((tasks: Task[]) => [
+			...tasks,
+			{
+				id: new Date().getMilliseconds(),
+				title: newTaskTitle,
+				done: false,
+			},
+		])
+	}
 
-   return (
-      <View style={styles.container}>
-         <Header tasksCounter={tasks.length} />
+	function handleToggleTaskDone(id: number) {
+		const doneTasks: Task[] = tasks.map((item) => {
+			if (item.id === id) item.done = !item.done
+			return item
+		})
+		setTasks(doneTasks)
+	}
 
-         <TodoInput addTask={handleAddTask} />
+	function handleRemoveTask(id: number) {
+		setTasks(tasks.filter((item) => item.id !== id))
+	}
 
-         <TasksList
-            tasks={tasks}
-            toggleTaskDone={handleToggleTaskDone}
-            removeTask={handleRemoveTask}
-         />
-      </View>
-   )
+	return (
+		<View style={styles.container}>
+			<Header tasksCounter={tasks.length} />
+
+			<TodoInput addTask={handleAddTask} />
+
+			<TasksList
+				tasks={tasks}
+				toggleTaskDone={handleToggleTaskDone}
+				removeTask={handleRemoveTask}
+			/>
+		</View>
+	)
 }
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: '#EBEBEB'
-   }
+	container: {
+		flex: 1,
+		backgroundColor: '#EBEBEB',
+	},
 })
