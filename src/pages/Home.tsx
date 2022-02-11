@@ -1,34 +1,31 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Alert } from 'react-native'
 
 import { Header } from '../components/Header'
 import { Task, TasksList } from '../components/TasksList'
 import { TodoInput } from '../components/TodoInput'
 
-type EditTaskProps = {
-	taskId: number
-	taskNewTitle: string
-}
-
 export function Home() {
 	const [tasks, setTasks] = useState<Task[]>([])
 
 	function handleAddTask(newTaskTitle: string) {
-		const taskWithSameTitle = tasks.find(
-			(task) => task.title === newTaskTitle
-		)
-
-		if (taskWithSameTitle) {
-			return Alert.alert(
-				'Tarefa já cadastrada',
-				'Você não pode cadastrar uma task com o mesmo nome'
+		if (tasks.find((task) => task.title === newTaskTitle)) {
+			Alert.alert(
+				'Task já cadastrada',
+				'Você não pode cadastrar uma task com o mesmo nome',
+				[
+					{
+						style: 'cancel',
+						text: 'Ok',
+					},
+				]
 			)
+			return
 		}
-
-		setTasks((tasks: Task[]) => [
-			...tasks,
+		setTasks((oldTasks) => [
+			...oldTasks,
 			{
-				id: new Date().getMilliseconds(),
+				id: new Date().getTime(),
 				title: newTaskTitle,
 				done: false,
 			},
@@ -36,11 +33,16 @@ export function Home() {
 	}
 
 	function handleToggleTaskDone(id: number) {
-		const doneTasks: Task[] = tasks.map((item) => {
-			if (item.id === id) item.done = !item.done
-			return item
+		const updatedTasks = tasks.map((task) => {
+			if (task.id === id) {
+				return {
+					...task,
+					done: !task.done,
+				}
+			}
+			return { ...task }
 		})
-		setTasks(doneTasks)
+		setTasks(updatedTasks)
 	}
 
 	function handleRemoveTask(id: number) {
@@ -51,24 +53,32 @@ export function Home() {
 				{
 					style: 'cancel',
 					text: 'Não',
+					onPress: () => {},
 				},
 				{
 					style: 'destructive',
 					text: 'Sim',
-					onPress: () =>
-						setTasks(tasks.filter((item) => item.id !== id)),
+					onPress: () => {
+						setTasks((oldTasks) =>
+							oldTasks.filter((task) => task.id !== id)
+						)
+					},
 				},
 			]
 		)
 	}
 
-	function handleEditTask({ taskId, taskNewTitle }: EditTaskProps) {
-		const newTasks = tasks.map((task) => ({ ...task }))
-		const taskToBeEdited = newTasks.find((task) => task.id === taskId)
-		if (taskToBeEdited) {
-			taskToBeEdited.title = taskNewTitle
-			setTasks(newTasks)
-		}
+	function handleEditTask(taskId: number, taskNewTitle: string) {
+		const updatedTasks = tasks.map((task) => {
+			if (task.id === taskId) {
+				return {
+					...task,
+					title: taskNewTitle,
+				}
+			}
+			return { ...task }
+		})
+		setTasks(updatedTasks)
 	}
 
 	return (
@@ -81,6 +91,7 @@ export function Home() {
 				tasks={tasks}
 				toggleTaskDone={handleToggleTaskDone}
 				removeTask={handleRemoveTask}
+				editTask={handleEditTask}
 			/>
 		</View>
 	)
